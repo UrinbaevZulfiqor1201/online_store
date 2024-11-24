@@ -1,0 +1,43 @@
+{% extends 'app_main/base.html' %}
+{% block content %}
+    <main class="vh-100 bg-body-tertiary">
+        <div class="container m-auto mt-5 row gap-2 justify-content-center">
+            <h1 class="d-flex justify-content-center mb-5">{{ user.get_full_name }}</h1>
+
+            <div class="d-flex justify-content-center gap-5">
+                <img style="width: 300px; border-radius: 50%"
+                     src="https://cdn3.iconfinder.com/data/icons/player/128/sound-18-1024.png" alt="Profile Picture">
+                <br>
+                <br>
+
+
+                <div class="container">
+                    <br>
+                    <br>
+                <ul class="icon-list">
+                    <li>
+                        <i class="fas fa-home"></i>
+                        <a href="{% url 'index' %}">Home Page</a>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <a href="{% url 'logout' %}">Log out</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-edit"></i>
+                        <a href="{% url 'update_account'%}">Update Account</a>
+                    </li>
+
+                    <li>
+                        <i class="fas fa-shopping-cart"></i>
+                        <a href="/cart">My  Cart</a>
+                    </li>
+
+                </ul>
+                 </div>
+
+
+            </div>
+        </div>
+    </main>
+{% endblock %}

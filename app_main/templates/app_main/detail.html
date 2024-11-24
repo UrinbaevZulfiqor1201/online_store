@@ -1,0 +1,105 @@
+{% extends 'app_main/base.html' %}
+
+{% block title %}{{ product.name }} Details{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Product Image Section (Left) -->
+            <div class="col-md-6">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow-sm"
+                     style="max-height: 500px; object-fit: contain;">
+            </div>
+
+            <!-- Product Information Section (Right) -->
+            <div class="col-md-6">
+                <h1>{{ product.name }}</h1>
+                <br>
+
+                <!-- Product Category -->
+                <p class="text-muted">
+                    <strong>Category:</strong>
+                    <a href="{% url 'category_products' product.category.id %}">{{ product.category.title }}</a>
+                </p>
+
+                <!-- Product Description -->
+                <p>
+                    <strong>Description:</strong>
+                    <br>
+                    {{ product.description }}
+                </p>
+
+                <!-- Pricing -->
+                <p>
+                    <strong>Price:</strong>
+                    <span style="text-decoration: line-through; color: red;">${{ product.old_price }}</span>
+                    <span style="color: green; font-size: 1.25rem;">${{ product.new_price }}</span>
+                </p>
+
+                <!-- Stock -->
+                <p>
+                    <strong>Quantity:</strong> {{ product.quantity }}
+                </p>
+
+                <!-- Dates -->
+                <p class="text-muted">
+                    <small>
+                        Created At: {{ product.created_at|date:"F j, Y, g:i a" }}<br>
+                        Last Updated: {{ product.updated_at|date:"F j, Y, g:i a" }}
+                    </small>
+                </p>
+
+                <!-- Action Buttons -->
+                <form action="{% url 'add_to_cart' product_id=product.id %}" method="post" class="w-100">
+                    {% csrf_token %}
+                                <input id="product-id" type="hidden" name="product_id" value="{{ product.id }}">
+                                <input id="product-quantity" type="hidden" name="quantity" value="1">
+                    <div class="mt-4">
+                        {% if not user.is_authenticated %}
+                            <b> Please <a href="{% url 'login' %}"></a></b>
+                        {% else %}
+                            <div class="d-flex align-items-center gap-2 w-100">
+                                <button id="decrement-btn" type="button" class="btn btn-secondary"
+                                        style="width: 17.5%;">-
+                                </button>
+                                <p id="quantity" class="m-0 border border-secondary py-2 px-4 rounded">1</p>
+                                <button id="increment-btn" type="button" class="btn btn-secondary"
+                                        style="width: 17.5%;">+
+                                </button>
+                            </div>
+                            <button id="add-to-cart" type="submit" class="mt-1 btn btn-success w-50" href="{% url 'add_to_cart' product.id %}">Add to cart
+                            </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Product quantity counter
+        const incrementBtn = document.getElementById('increment-btn');
+        const decrementBtn = document.getElementById('decrement-btn');
+        const quantityDisplay = document.getElementById('quantity');
+        const productQuantityInput = document.getElementById('product-quantity');
+
+        // Helper function to update quantity
+        const updateQuantity = (newQuantity) => {
+            quantityDisplay.textContent = newQuantity;
+            productQuantityInput.value = newQuantity;
+        };
+
+        incrementBtn.addEventListener('click', () => {
+            const currentQuantity = Number(quantityDisplay.textContent);
+            updateQuantity(currentQuantity + 1);
+        });
+
+        decrementBtn.addEventListener('click', () => {
+            const currentQuantity = Number(quantityDisplay.textContent);
+            if (currentQuantity > 1) {
+                updateQuantity(currentQuantity - 1);
+            }
+        });
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,50 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+{% block content %}
+    <main class="vh-25 bg-body-tertiary">
+      <div class="container m-auto mt-1 row gap-2 justify-content-center">
+        <h1 class="d-flex justify-content-center mb-2">Products</h1>
+        {% for product in products %}
+            <div class="card col-3 p-0">
+          <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap" />
+          <div class="card-body">
+            <h3><a class="text-decoration-none" href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a></h3>
+            <p class="card-text">{{ product.description | linebreaksbr }}</p>
+            <div class="d-flex flex-column gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <b><small> Old price: </small></b>
+                <small class="text-decoration-line-through"><b class="text-danger">${{ product.old_price }}</b></small>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <b><small>Current price: </small></b>
+                <small><b class="text-success">${{ product.new_price }}</b></small>
+              </div>
+            </div>
+              <br>
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                            href="{% url 'product_detail' pk=product.pk %}">View product</a></div>
+                </div>
+          </div>
+        </div>
+            {% empty %}
+                <p>No products available in this category.</p>
+        {% endfor %}
+
+      </div>
+
+      <div class="d-flex justify-content-center mt-5">
+        <nav aria-label="...">
+          <ul class="pagination">
+            <li class="page-item disabled"><a class="page-link text-dark" href="#" tabindex="-1">&laquo;</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
+            <li class="page-item"><a class="page-link bg-dark text-white" href="#">2</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#"> &raquo; </a></li>
+          </ul>
+        </nav>
+      </div>
+    </main>
+{% endblock %}
+
+
